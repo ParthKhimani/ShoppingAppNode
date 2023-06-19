@@ -5,7 +5,9 @@ const router = express();
 
 router.post("/getCategory", controller.getCategory);
 
-router.post("/setCategory", controller.setCategory);
+router.post("/setFilter", controller.setFilter);
+
+router.post("/addToCart", controller.addToCart);
 
 router.post("/getData", controller.getData);
 

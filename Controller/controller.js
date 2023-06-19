@@ -12,12 +12,22 @@ exports.getCategory = (req, res, next) => {
   });
 };
 
-exports.setCategory = (req, res, next) => {
+exports.setFilter = (req, res, next) => {
   const categoryObject = req.body;
-  const category = categoryObject.category
-  Product.find({ productCategory: category }).then((result) => {
-      res.json({ products: result });
-    });
+  const category = categoryObject.category;
+  const price = categoryObject.priceRange;
+  const minPrice = price.split("-")[0];
+  const maxPrice = price.split("-")[1];
+  Product.find({
+    productCategory: category,
+    productPrice: { $gte: minPrice, $lte: maxPrice },
+  }).then((result) => {
+    res.json({ products: result });
+  });
+};
+
+exports.addToCart = (req, res, next) => {
+  console.log(req.body);
 };
 
 exports.getData = (req, res, next) => {
