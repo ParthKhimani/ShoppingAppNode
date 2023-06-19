@@ -12,10 +12,16 @@ exports.getCategory = (req, res, next) => {
   });
 };
 
+exports.setCategory = (req, res, next) => {
+  const categoryObject = req.body;
+  const category = categoryObject.category
+  Product.find({ productCategory: category }).then((result) => {
+      res.json({ products: result });
+    });
+};
+
 exports.getData = (req, res, next) => {
-  console.log('called')
   Product.find().then((result) => {
-    console.log(result)
     res.json({ products: result, status: 302 });
   });
 };

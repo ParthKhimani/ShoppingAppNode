@@ -23,7 +23,7 @@ app.use(router);
 mongoose.set("strictQuery", true);
 mongoose
   .connect(MONGO_URI)
-  .then((result) => {
+  .then(() => {
     app.listen(4444);
   })
   .catch((err) => console.log(err));
