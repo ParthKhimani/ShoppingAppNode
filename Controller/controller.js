@@ -1,3 +1,4 @@
+const product = require("../Model/product");
 const Product = require("../Model/product");
 
 exports.getCategory = (req, res, next) => {
@@ -13,21 +14,29 @@ exports.getCategory = (req, res, next) => {
 };
 
 exports.setFilter = (req, res, next) => {
-  const categoryObject = req.body;
-  const category = categoryObject.category;
-  const price = categoryObject.priceRange;
-  const minPrice = price.split("-")[0];
-  const maxPrice = price.split("-")[1];
-  Product.find({
-    productCategory: category,
-    productPrice: { $gte: minPrice, $lte: maxPrice },
-  }).then((result) => {
+  const { category, priceRange } = req.body;
+  let filter = {};
+
+  if (category && !priceRange) {
+    filter = { productCategory: category };
+  } else if (!category && priceRange) {
+    const minPrice = priceRange.split("-")[0];
+    const maxPrice = priceRange.split("-")[1];
+    filter = {
+      productPrice: { $gte: minPrice, $lte: maxPrice },
+    };
+  } else if (category && priceRange) {
+    const minPrice = priceRange.split("-")[0];
+    const maxPrice = priceRange.split("-")[1];
+    filter = {
+      productCategory: category,
+      productPrice: { $gte: minPrice, $lte: maxPrice },
+    };
+  }
+
+  Product.find(filter).then((result) => {
     res.json({ products: result });
   });
-};
-
-exports.addToCart = (req, res, next) => {
-  console.log(req.body);
 };
 
 exports.getData = (req, res, next) => {
