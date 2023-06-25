@@ -9,4 +9,6 @@ router.post("/setFilter", controller.setFilter);
 
 router.post("/getData", controller.getData);
 
+router.post("/checkout", controller.checkout);
+
 module.exports = router;

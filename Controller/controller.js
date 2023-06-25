@@ -1,4 +1,7 @@
-const product = require("../Model/product");
+const stripe = require("stripe")(
+  "sk_test_51MlQ9rSBkF0GV1OMU9MK5lSLgkUtGJzy7S8vEz5023nn2ryQ95NKQd5NR3SHNLeJf4BVyYPtZcNnQI1tifC0BwJ100oxVCurec"
+);
+
 const Product = require("../Model/product");
 
 exports.getCategory = (req, res, next) => {
@@ -43,4 +46,8 @@ exports.getData = (req, res, next) => {
   Product.find().then((result) => {
     res.json({ products: result, status: 302 });
   });
+};
+
+exports.checkout = (req, res, next) => {
+  console.log(req.body);
 };
