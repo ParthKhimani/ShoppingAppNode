@@ -1,7 +1,6 @@
 const stripe = require("stripe")(
   "sk_test_51MlQ9rSBkF0GV1OMU9MK5lSLgkUtGJzy7S8vEz5023nn2ryQ95NKQd5NR3SHNLeJf4BVyYPtZcNnQI1tifC0BwJ100oxVCurec"
 );
-
 const Product = require("../Model/product");
 
 exports.getCategory = (req, res, next) => {
@@ -49,16 +48,33 @@ exports.getData = (req, res, next) => {
 };
 
 exports.checkout = async (req, res, next) => {
-  console.log(req.body);
   const amount = req.body.amount;
-  const customer = req.body.card.name;
-  console.log(amount);
+  const customer = req.body.token.card.name;
+
+  let customerId = "";
+  const createCustomer = await stripe.customers
+    .create({
+      email: customer,
+    })
+    .then((createCustomer) => {
+      customerId = createCustomer.id;
+    });
+
+  console.log(createCustomer);
+
   const paymentIntent = await stripe.paymentIntents
     .create({
-      amount: amount,
+      amount: amount * 100,
       currency: "inr",
       automatic_payment_methods: { enabled: true },
-      customer: customer,
+      customer: customerId,
     })
-    .then(res.json({ msg: "payment done successfully", status: 200 }));
+    .then(
+      res.json({
+        msg: "payment done successfully",
+        status: 200,
+        customer_email_id: customer,
+        amount: amount,
+      })
+    );
 };
