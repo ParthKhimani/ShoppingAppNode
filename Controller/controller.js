@@ -48,6 +48,17 @@ exports.getData = (req, res, next) => {
   });
 };
 
-exports.checkout = (req, res, next) => {
+exports.checkout = async (req, res, next) => {
   console.log(req.body);
+  const amount = req.body.amount;
+  const customer = req.body.card.name;
+  console.log(amount);
+  const paymentIntent = await stripe.paymentIntents
+    .create({
+      amount: amount,
+      currency: "inr",
+      automatic_payment_methods: { enabled: true },
+      customer: customer,
+    })
+    .then(res.json({ msg: "payment done successfully", status: 200 }));
 };
