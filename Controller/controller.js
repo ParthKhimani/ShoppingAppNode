@@ -60,8 +60,6 @@ exports.checkout = async (req, res, next) => {
       customerId = createCustomer.id;
     });
 
-  console.log(createCustomer);
-
   const paymentIntent = await stripe.paymentIntents
     .create({
       amount: amount * 100,
